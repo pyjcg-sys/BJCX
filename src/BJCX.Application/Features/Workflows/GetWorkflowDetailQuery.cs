@@ -12,6 +12,7 @@ namespace BJCX.Application.Features.Workflows;
 /// <summary>查询审批流程详情（含节点与审批人）。</summary>
 public class GetWorkflowDetailQuery : IRequest<WorkflowDefinitionDto>
 {
+    /// <summary>流程 Id。</summary>
     public long WorkflowDefinitionId { get; set; }
 }
 

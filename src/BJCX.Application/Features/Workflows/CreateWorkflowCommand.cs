@@ -9,22 +9,29 @@ namespace BJCX.Application.Features.Workflows;
 /// <summary>创建流程时的节点输入。</summary>
 public class WorkflowNodeInput
 {
+    /// <summary>节点序号（从 0 开始，串行流转顺序）。</summary>
     public int Order { get; set; }
 
+    /// <summary>节点名称，如「直属领导审批」。</summary>
     public string Name { get; set; } = string.Empty;
 
+    /// <summary>审批人 Id。</summary>
     public long ApproverId { get; set; }
 }
 
 /// <summary>创建审批流程命令（简易配置，不引入重型工作流框架）。</summary>
 public class CreateWorkflowCommand : IRequest<long>
 {
+    /// <summary>流程名称。</summary>
     public string Name { get; set; } = string.Empty;
 
+    /// <summary>流程描述。</summary>
     public string Description { get; set; } = string.Empty;
 
+    /// <summary>是否启用。</summary>
     public bool IsEnabled { get; set; } = true;
 
+    /// <summary>流程节点集合。</summary>
     public List<WorkflowNodeInput> Nodes { get; set; } = new();
 }
 

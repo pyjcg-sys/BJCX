@@ -18,6 +18,8 @@ public class AuthController : ControllerBase
     public AuthController(IMediator mediator) => _mediator = mediator;
 
     /// <summary>登录：校验账号密码，返回 JWT 访问令牌。</summary>
+    /// <param name="command">登录命令（用户名、密码）。</param>
+    /// <returns>登录结果（JWT 令牌与用户信息）。</returns>
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<ActionResult<LoginResultDto>> Login([FromBody] LoginCommand command)

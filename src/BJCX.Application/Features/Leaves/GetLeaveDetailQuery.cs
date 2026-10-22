@@ -13,6 +13,7 @@ namespace BJCX.Application.Features.Leaves;
 /// <summary>查询请假单据详情（含附件与完整审批记录）。</summary>
 public class GetLeaveDetailQuery : IRequest<LeaveDetailDto>
 {
+    /// <summary>请假单据 Id。</summary>
     public long LeaveRequestId { get; set; }
 }
 

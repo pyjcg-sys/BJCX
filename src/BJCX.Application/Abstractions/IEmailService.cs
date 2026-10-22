@@ -10,5 +10,6 @@ public interface IEmailService
     /// <param name="to">收件人邮箱。</param>
     /// <param name="subject">主题。</param>
     /// <param name="body">正文。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
     Task SendAsync(string to, string subject, string body, CancellationToken cancellationToken = default);
 }

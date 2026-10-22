@@ -13,26 +13,35 @@ namespace BJCX.Application.Features.Leaves;
 /// <summary>提交时已上传附件的元信息（文件体已由文件存储服务落盘）。</summary>
 public class AttachmentUploadDto
 {
+    /// <summary>原始文件名。</summary>
     public string FileName { get; set; } = string.Empty;
 
+    /// <summary>存储 Key（文件存储服务内唯一标识）。</summary>
     public string StorageKey { get; set; } = string.Empty;
 
+    /// <summary>内容类型（MIME）。</summary>
     public string ContentType { get; set; } = string.Empty;
 
+    /// <summary>文件大小（字节）。</summary>
     public long FileSize { get; set; }
 }
 
 /// <summary>提交请假申请命令（申请人从当前登录用户解析）。</summary>
 public class SubmitLeaveCommand : IRequest<long>
 {
+    /// <summary>请假类型（Annual/Personal/Sick/Marriage/Other）。</summary>
     public LeaveType LeaveType { get; set; }
 
+    /// <summary>开始日期。</summary>
     public DateTime StartDate { get; set; }
 
+    /// <summary>结束日期。</summary>
     public DateTime EndDate { get; set; }
 
+    /// <summary>请假事由。</summary>
     public string? Reason { get; set; }
 
+    /// <summary>已上传的附件元信息列表。</summary>
     public List<AttachmentUploadDto> Attachments { get; set; } = new();
 }
 

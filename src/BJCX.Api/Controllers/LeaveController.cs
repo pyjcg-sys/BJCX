@@ -27,6 +27,12 @@ public class LeaveController : ControllerBase
     }
 
     /// <summary>提交请假申请，支持一并上传多个附件（multipart/form-data）。</summary>
+    /// <param name="leaveType">请假类型（Annual/Personal/Sick/Marriage/Other）。</param>
+    /// <param name="startDate">开始日期。</param>
+    /// <param name="endDate">结束日期。</param>
+    /// <param name="reason">请假事由（类型为 Other 时必填）。</param>
+    /// <param name="attachments">附件列表（可选）。</param>
+    /// <returns>新单据 Id。</returns>
     [HttpPost("submit")]
     [RequestSizeLimit(50 * 1024 * 1024)]
     public async Task<IActionResult> Submit(
@@ -65,6 +71,8 @@ public class LeaveController : ControllerBase
     }
 
     /// <summary>审批同意：按串行规则流转到下一审批节点。</summary>
+    /// <param name="id">请假单据 Id。</param>
+    /// <param name="request">审批请求（含审批意见）。</param>
     [HttpPost("{id:long}/approve")]
     public async Task<IActionResult> Approve(long id, [FromBody] ApprovalRequest request)
     {
@@ -73,6 +81,8 @@ public class LeaveController : ControllerBase
     }
 
     /// <summary>审批驳回：驳回单据并通知申请人。</summary>
+    /// <param name="id">请假单据 Id。</param>
+    /// <param name="request">驳回请求（含驳回意见）。</param>
     [HttpPost("{id:long}/reject")]
     public async Task<IActionResult> Reject(long id, [FromBody] ApprovalRequest request)
     {
@@ -81,6 +91,8 @@ public class LeaveController : ControllerBase
     }
 
     /// <summary>查询请假单据详情（基础信息 + 附件 + 审批记录，走 Redis 缓存）。</summary>
+    /// <param name="id">请假单据 Id。</param>
+    /// <returns>单据详情。</returns>
     [HttpGet("{id:long}")]
     public async Task<ActionResult<LeaveDetailDto>> GetDetail(long id)
     {
@@ -88,6 +100,9 @@ public class LeaveController : ControllerBase
     }
 
     /// <summary>查询我的待审批单据分页列表。</summary>
+    /// <param name="pageIndex">页码（从 1 开始）。</param>
+    /// <param name="pageSize">每页条数（1-100）。</param>
+    /// <returns>分页结果。</returns>
     [HttpGet("pending")]
     public async Task<ActionResult<PagedResult<LeaveDto>>> GetPending([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
     {

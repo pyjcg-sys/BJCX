@@ -89,6 +89,18 @@ try
     {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "请假审批流程系统 API", Version = "v1" });
 
+        // 加载 XML 文档注释，使接口说明与 DTO 字段说明显示在 Swagger 中
+        var apiXmlPath = Path.Combine(AppContext.BaseDirectory, "BJCX.Api.xml");
+        var applicationXmlPath = Path.Combine(AppContext.BaseDirectory, "BJCX.Application.xml");
+        if (File.Exists(apiXmlPath))
+        {
+            c.IncludeXmlComments(apiXmlPath);
+        }
+        if (File.Exists(applicationXmlPath))
+        {
+            c.IncludeXmlComments(applicationXmlPath);
+        }
+
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             Description = "请输入 JWT，格式：Bearer {token}",

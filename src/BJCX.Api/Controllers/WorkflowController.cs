@@ -19,6 +19,8 @@ public class WorkflowController : ControllerBase
     public WorkflowController(IMediator mediator) => _mediator = mediator;
 
     /// <summary>创建审批流程（含节点与审批人）。</summary>
+    /// <param name="command">创建流程命令。</param>
+    /// <returns>新流程 Id。</returns>
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateWorkflowCommand command)
     {
@@ -27,6 +29,7 @@ public class WorkflowController : ControllerBase
     }
 
     /// <summary>查询审批流程列表。</summary>
+    /// <returns>流程列表。</returns>
     [HttpGet]
     public async Task<ActionResult<List<WorkflowListItemDto>>> GetList()
     {
@@ -34,6 +37,8 @@ public class WorkflowController : ControllerBase
     }
 
     /// <summary>查询审批流程详情（含节点与审批人）。</summary>
+    /// <param name="id">流程 Id。</param>
+    /// <returns>流程详情。</returns>
     [HttpGet("{id:long}")]
     public async Task<ActionResult<WorkflowDefinitionDto>> GetDetail(long id)
     {

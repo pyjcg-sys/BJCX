@@ -13,8 +13,10 @@ namespace BJCX.Application.Features.Leaves;
 /// <summary>审批同意命令。</summary>
 public class ApproveLeaveCommand : IRequest
 {
+    /// <summary>请假单据 Id。</summary>
     public long LeaveRequestId { get; set; }
 
+    /// <summary>审批意见。</summary>
     public string Comment { get; set; } = string.Empty;
 }
 

@@ -14,8 +14,10 @@ namespace BJCX.Application.Features.Leaves;
 /// <summary>查询我的待审批单据分页列表。</summary>
 public class GetMyPendingListQuery : IRequest<PagedResult<LeaveDto>>
 {
+    /// <summary>页码（从 1 开始）。</summary>
     public int PageIndex { get; set; } = 1;
 
+    /// <summary>每页条数（1-100）。</summary>
     public int PageSize { get; set; } = 10;
 }
 
