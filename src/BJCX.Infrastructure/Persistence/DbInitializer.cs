@@ -1,5 +1,5 @@
 using BJCX.Domain.Entities;
-using BJCX.Infrastructure.Security;
+using BJCX.Domain.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace BJCX.Infrastructure.Persistence;

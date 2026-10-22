@@ -1,9 +1,10 @@
 using BJCX.Domain.Entities;
 
-namespace BJCX.Infrastructure.Persistence;
+namespace BJCX.Application.Abstractions;
 
 /// <summary>
 /// 通用仓储接口：统一增删改查入口，避免业务代码直接操作 DbContext。
+/// 定义在应用层，基础设施层提供 EF Core 实现。
 /// </summary>
 /// <typeparam name="TEntity">实体类型（继承 BaseEntity）。</typeparam>
 public interface IRepository<TEntity> where TEntity : BaseEntity

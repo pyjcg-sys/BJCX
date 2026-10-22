@@ -54,6 +54,9 @@ public class InfrastructureModule : Module
         // 通用仓储
         builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
 
+        // 工作单元（事务）
+        builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
+
         // 各类服务实现
         builder.RegisterType<LocalFileStorageService>().As<IFileStorageService>().InstancePerLifetimeScope();
         builder.RegisterType<LogEmailService>().As<IEmailService>().SingleInstance();

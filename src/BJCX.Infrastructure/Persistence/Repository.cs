@@ -1,3 +1,4 @@
+using BJCX.Application.Abstractions;
 using BJCX.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

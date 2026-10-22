@@ -1,9 +1,10 @@
 using System.Security.Cryptography;
 
-namespace BJCX.Infrastructure.Security;
+namespace BJCX.Domain.Security;
 
 /// <summary>
 /// 密码哈希工具：使用 PBKDF2（SHA256）加盐哈希，格式为「迭代次数.盐.密钥」。
+/// 放在领域层，供应用层（登录校验）与基础设施层（种子数据）共同复用。
 /// </summary>
 public static class PasswordHasher
 {
