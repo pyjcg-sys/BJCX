@@ -1,0 +1,6 @@
+@BJCX.Api_HostAddress = http://localhost:5107
+
+GET {{BJCX.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

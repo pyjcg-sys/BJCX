@@ -1,0 +1,31 @@
+# 构建产物
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / 其他 IDE
+.idea/
+
+# 运行时数据（本地 SQLite 数据库、上传附件、日志）
+*.db
+*.db-shm
+*.db-wal
+App_Data/
+logs/
+*.log
+
+# 测试结果
+TestResults/
+*.trx
+
+# NuGet
+*.nupkg
+*.snupkg
