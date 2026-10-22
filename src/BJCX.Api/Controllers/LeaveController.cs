@@ -108,4 +108,14 @@ public class LeaveController : ControllerBase
     {
         return Ok(await _mediator.Send(new GetMyPendingListQuery { PageIndex = pageIndex, PageSize = pageSize }));
     }
+
+    /// <summary>查询我提交的请假申请分页列表。</summary>
+    /// <param name="pageIndex">页码（从 1 开始）。</param>
+    /// <param name="pageSize">每页条数（1-100）。</param>
+    /// <returns>分页结果。</returns>
+    [HttpGet("mine")]
+    public async Task<ActionResult<PagedResult<LeaveDto>>> GetMine([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
+    {
+        return Ok(await _mediator.Send(new GetMyLeavesQuery { PageIndex = pageIndex, PageSize = pageSize }));
+    }
 }
