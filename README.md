@@ -1,8 +1,9 @@
 # 请假审批流程系统（.NET / C#）
 
-北京创新数智科技有限公司面试 —— 请假审批流程系统后端。
+北京创新数智科技有限公司面试 —— 请假审批流程系统（后端 + 前端管理后台）。
 
-采用 **CQRS 架构**，基于 ASP.NET Core 8 + MediatR + Autofac + FluentValidation + AutoMapper + EF Core(SQLite) + Redis + Serilog + JWT 构建。
+**后端**：CQRS 架构，基于 ASP.NET Core 8 + MediatR + Autofac + FluentValidation + AutoMapper + EF Core(SQLite) + Redis + Serilog + JWT。
+**前端**：Vue 3 + Vite + Element Plus + Vue Router + Axios。
 
 ## 一、架构与技术规范
 
@@ -26,6 +27,7 @@ BJCX.sln
 │   ├── BJCX.Application/     Command/Query/Handler/Validator/DTO/Profile/管道/接口抽象
 │   ├── BJCX.Infrastructure/  DbContext/BaseRepository/Redis/文件/邮件/JWT/种子数据/Autofac 模块
 │   └── BJCX.Api/             Controller/Filter/异常中间件/Program/appsettings
+├── frontend/                 Vue3 管理后台（登录/待办审批/我的申请/流程配置）
 └── tests/
     └── BJCX.Tests/           xUnit 单元测试
 ```
@@ -33,9 +35,12 @@ BJCX.sln
 ## 三、运行要求
 
 - .NET 8 SDK
+- Node.js 18+（前端）
 - Redis（本机 `localhost:6379`，缓存必需）
 
 ## 四、快速开始
+
+### 后端
 
 ```bash
 # 1. 启动 Redis（确保 6379 端口可用）
@@ -43,8 +48,16 @@ BJCX.sln
 # 2. 运行 API（首次启动自动建库并写入种子数据）
 dotnet run --project src/BJCX.Api
 
-# 3. 打开 Swagger 调试界面
-#    http://localhost:5107/swagger
+# 3. Swagger 调试界面：http://localhost:5107/swagger
+```
+
+### 前端管理后台
+
+```bash
+cd frontend
+npm install
+npm run dev
+# 打开 http://localhost:5173
 ```
 
 ## 五、演示账号（密码均为 123456）
@@ -74,11 +87,24 @@ dotnet run --project src/BJCX.Api
 | POST | `/api/leaves/{id}/reject` | 审批驳回 |
 | GET | `/api/leaves/{id}` | 单据详情（附件 + 审批记录，Redis 缓存） |
 | GET | `/api/leaves/pending` | 我的待办分页列表（Redis 缓存） |
+| GET | `/api/leaves/mine` | 我提交的申请分页列表 |
+| GET | `/api/users` | 用户列表（流程配置选审批人） |
 | POST | `/api/workflows` | 创建审批流程 |
 | GET | `/api/workflows` | 流程列表 |
 | GET | `/api/workflows/{id}` | 流程详情 |
 
-## 八、测试
+## 八、前端管理后台
+
+| 页面 | 路由 | 功能 |
+| ---- | ---- | ---- |
+| 登录 | `/login` | 账号密码登录，签发 JWT |
+| 待办审批 | `/pending` | 待办列表、详情抽屉、同意/驳回 |
+| 我的申请 | `/my-leaves` | 提交请假（多附件）+ 我的申请列表 |
+| 流程配置 | `/workflows` | 流程列表、新建流程（节点 + 审批人） |
+
+前端通过 Vite 开发代理将 `/api` 转发到后端 `http://localhost:5107`，无需后端配置跨域。
+
+## 九、测试
 
 ```bash
 dotnet test
