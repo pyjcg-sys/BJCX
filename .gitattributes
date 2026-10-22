@@ -1,0 +1,7 @@
+# 统一换行符，避免 Windows 下的 CRLF 警告
+* text=auto
+*.cs text eol=crlf
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.json text eol=crlf
+*.md text eol=crlf
