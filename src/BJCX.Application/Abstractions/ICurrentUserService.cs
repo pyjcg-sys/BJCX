@@ -20,4 +20,10 @@ public interface ICurrentUserService
 
     /// <summary>是否已通过认证。</summary>
     bool IsAuthenticated { get; }
+
+    /// <summary>
+    /// 由 Api 层的 CurrentUserFilter 在请求管道中解析 JWT 后写入，
+    /// 使 Controller 与 Handler 不重复解析 Token。
+    /// </summary>
+    void SetUser(long? userId, string? userName, string? displayName, string? email);
 }
