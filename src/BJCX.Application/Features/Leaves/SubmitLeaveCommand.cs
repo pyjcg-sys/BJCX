@@ -171,7 +171,7 @@ public class SubmitLeaveCommandHandler : IRequestHandler<SubmitLeaveCommand, lon
         if (!string.IsNullOrEmpty(firstNode.Approver?.Email))
         {
             await _emailService.SendAsync(
-                firstNode.Approver.Email,
+                new EmailRecipient(firstNode.ApproverId, firstNode.Approver.DisplayName, firstNode.Approver.Email),
                 "【请假审批】新的待办申请",
                 $"员工 {applicant.DisplayName} 提交了请假申请（单号：{leave.RequestNo}，{request.StartDate:yyyy-MM-dd} 至 {request.EndDate:yyyy-MM-dd}），请及时审批。",
                 cancellationToken);

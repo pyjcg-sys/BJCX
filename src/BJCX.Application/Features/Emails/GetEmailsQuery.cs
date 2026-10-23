@@ -1,6 +1,7 @@
 using AutoMapper;
 using BJCX.Application.Abstractions;
 using BJCX.Application.DTOs;
+using BJCX.Application.Exceptions;
 using BJCX.Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -32,17 +33,22 @@ public class GetEmailsQueryValidator : AbstractValidator<GetEmailsQuery>
 public class GetEmailsQueryHandler : IRequestHandler<GetEmailsQuery, PagedResult<EmailMessageDto>>
 {
     private readonly IRepository<EmailMessage> _emailRepository;
+    private readonly ICurrentUserService _currentUserService;
     private readonly IMapper _mapper;
 
-    public GetEmailsQueryHandler(IRepository<EmailMessage> emailRepository, IMapper mapper)
+    public GetEmailsQueryHandler(IRepository<EmailMessage> emailRepository, ICurrentUserService currentUserService, IMapper mapper)
     {
         _emailRepository = emailRepository;
+        _currentUserService = currentUserService;
         _mapper = mapper;
     }
 
     public async Task<PagedResult<EmailMessageDto>> Handle(GetEmailsQuery request, CancellationToken cancellationToken)
     {
-        var query = _emailRepository.QueryAsNoTracking();
+        // 按当前登录人过滤，只返回发给自己的邮件
+        var userId = _currentUserService.UserId ?? throw new BusinessException("当前未登录");
+
+        var query = _emailRepository.QueryAsNoTracking().Where(e => e.ToUserId == userId);
 
         var totalCount = await query.CountAsync(cancellationToken);
         var items = await query

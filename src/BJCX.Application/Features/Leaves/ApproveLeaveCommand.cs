@@ -112,7 +112,7 @@ public class ApproveLeaveCommandHandler : IRequestHandler<ApproveLeaveCommand>
             if (!string.IsNullOrEmpty(nextNode.Approver?.Email))
             {
                 await _emailService.SendAsync(
-                    nextNode.Approver.Email,
+                    new EmailRecipient(nextNode.ApproverId, nextNode.Approver.DisplayName, nextNode.Approver.Email),
                     "【请假审批】新的待办申请",
                     $"员工 {leave.ApplicantName} 的请假申请（单号：{leave.RequestNo}）已由上一节点审批通过，请及时审批。",
                     cancellationToken);
@@ -132,7 +132,7 @@ public class ApproveLeaveCommandHandler : IRequestHandler<ApproveLeaveCommand>
             if (!string.IsNullOrEmpty(leave.Applicant?.Email))
             {
                 await _emailService.SendAsync(
-                    leave.Applicant.Email,
+                    new EmailRecipient(leave.ApplicantId, leave.Applicant.DisplayName, leave.Applicant.Email),
                     "【请假审批】申请已通过",
                     $"您的请假申请（单号：{leave.RequestNo}）已全部审批通过。",
                     cancellationToken);

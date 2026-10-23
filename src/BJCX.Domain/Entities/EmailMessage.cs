@@ -5,6 +5,12 @@ namespace BJCX.Domain.Entities;
 /// </summary>
 public class EmailMessage : BaseEntity
 {
+    /// <summary>收件人用户 Id（用于按收件人隔离查询）。</summary>
+    public long ToUserId { get; set; }
+
+    /// <summary>收件人姓名（冗余存储，显示用，无需关联查询）。</summary>
+    public string ToUserName { get; set; } = string.Empty;
+
     /// <summary>收件人邮箱。</summary>
     public string To { get; set; } = string.Empty;
 

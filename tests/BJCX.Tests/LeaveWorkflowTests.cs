@@ -1,5 +1,6 @@
 using BJCX.Application.Abstractions;
 using BJCX.Application.Exceptions;
+using BJCX.Application.Features.Emails;
 using BJCX.Application.Features.Leaves;
 using BJCX.Domain.Entities;
 using BJCX.Domain.Enums;
@@ -38,7 +39,7 @@ public class LeaveWorkflowTests : TestBase
         record.ApproverId.Should().Be(LeaderId);
         record.Action.Should().Be(ApprovalAction.Pending);
 
-        EmailServiceMock.Verify(e => e.SendAsync("lisi@bjcx.com", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        EmailServiceMock.Verify(e => e.SendAsync(It.Is<EmailRecipient>(r => r.Email == "lisi@bjcx.com"), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -60,7 +61,7 @@ public class LeaveWorkflowTests : TestBase
         leave.ApprovalRecords.Should().ContainSingle(r => r.NodeOrder == 0 && r.Action == ApprovalAction.Approved);
         leave.ApprovalRecords.Should().ContainSingle(r => r.NodeOrder == 1 && r.Action == ApprovalAction.Pending);
 
-        EmailServiceMock.Verify(e => e.SendAsync("wangwu@bjcx.com", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        EmailServiceMock.Verify(e => e.SendAsync(It.Is<EmailRecipient>(r => r.Email == "wangwu@bjcx.com"), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -79,7 +80,7 @@ public class LeaveWorkflowTests : TestBase
         leave.Status.Should().Be(LeaveStatus.Approved);
         leave.CurrentNodeOrder.Should().Be(-1);
 
-        EmailServiceMock.Verify(e => e.SendAsync("zhangsan@bjcx.com", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        EmailServiceMock.Verify(e => e.SendAsync(It.Is<EmailRecipient>(r => r.Email == "zhangsan@bjcx.com"), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -124,7 +125,7 @@ public class LeaveWorkflowTests : TestBase
         leave.Status.Should().Be(LeaveStatus.Rejected);
         leave.CurrentNodeOrder.Should().Be(-1);
 
-        EmailServiceMock.Verify(e => e.SendAsync("zhangsan@bjcx.com", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        EmailServiceMock.Verify(e => e.SendAsync(It.Is<EmailRecipient>(r => r.Email == "zhangsan@bjcx.com"), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -180,6 +181,25 @@ public class LeaveWorkflowTests : TestBase
         var result = await handler.Handle(new GetMyPendingListQuery { PageIndex = 1, PageSize = 10 }, CancellationToken.None);
 
         result.TotalCount.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task 邮件查询_按当前用户过滤()
+    {
+        // 两封邮件：一封给李四、一封给王五
+        DbContext.Emails.AddRange(
+            new EmailMessage { ToUserId = LeaderId, ToUserName = "李四", To = "lisi@bjcx.com", Subject = "给李四", Body = "正文1", SentAt = DateTime.UtcNow },
+            new EmailMessage { ToUserId = ManagerId, ToUserName = "王五", To = "wangwu@bjcx.com", Subject = "给王五", Body = "正文2", SentAt = DateTime.UtcNow });
+        await DbContext.SaveChangesAsync();
+
+        // 当前登录人是李四，只能看到发给李四的邮件
+        var leader = CreateCurrentUser(LeaderId, "lisi", "李四");
+        var handler = new GetEmailsQueryHandler(new Repository<EmailMessage>(DbContext), leader, Mapper);
+
+        var result = await handler.Handle(new GetEmailsQuery { PageIndex = 1, PageSize = 10 }, CancellationToken.None);
+
+        result.TotalCount.Should().Be(1);
+        result.Items.Should().OnlyContain(e => e.ToUserId == LeaderId);
     }
 
     private async Task<long> SubmitAsync(ICurrentUserService currentUser)

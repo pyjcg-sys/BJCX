@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-card>
-      <template #header>邮件记录</template>
+      <template #header>我的邮件</template>
 
       <el-table v-loading="loading" :data="list" border>
         <el-table-column prop="id" label="ID" width="70" />
-        <el-table-column prop="to" label="收件人" width="220" />
+        <el-table-column prop="toUserName" label="收件人" width="120" />
         <el-table-column prop="subject" label="主题" min-width="200" show-overflow-tooltip />
         <el-table-column label="正文" min-width="320" show-overflow-tooltip>
           <template #default="{ row }">{{ row.body }}</template>

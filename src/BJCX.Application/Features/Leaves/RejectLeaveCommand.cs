@@ -93,7 +93,7 @@ public class RejectLeaveCommandHandler : IRequestHandler<RejectLeaveCommand>
         if (!string.IsNullOrEmpty(leave.Applicant?.Email))
         {
             await _emailService.SendAsync(
-                leave.Applicant.Email,
+                new EmailRecipient(leave.ApplicantId, leave.Applicant.DisplayName, leave.Applicant.Email),
                 "【请假审批】申请被驳回",
                 $"您的请假申请（单号：{leave.RequestNo}）已被驳回。驳回意见：{request.Comment}",
                 cancellationToken);

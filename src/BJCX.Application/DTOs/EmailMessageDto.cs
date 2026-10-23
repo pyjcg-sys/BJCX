@@ -8,7 +8,13 @@ public class EmailMessageDto
     /// <summary>邮件 Id。</summary>
     public long Id { get; set; }
 
-    /// <summary>收件人。</summary>
+    /// <summary>收件人用户 Id。</summary>
+    public long ToUserId { get; set; }
+
+    /// <summary>收件人姓名。</summary>
+    public string ToUserName { get; set; } = string.Empty;
+
+    /// <summary>收件人邮箱。</summary>
     public string To { get; set; } = string.Empty;
 
     /// <summary>主题。</summary>
