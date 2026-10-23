@@ -13,7 +13,7 @@
 4. **身份验证**：JWT + Swagger（Bearer），用户身份解析统一在 `CurrentUserFilter` 中完成。
 5. **FluentValidation 入参校验**：每个 Command/Query 对应一个 Validator，校验统一走校验管道。
 6. **AutoMapper**：`MappingProfile` 统一配置实体 ↔ DTO 映射。
-7. **Redis 缓存**：封装 `ICacheService`，Query 结果缓存，写操作触发对应缓存清理。
+7. **Redis 缓存**：封装 `ICacheService`，Query 结果缓存，写操作触发对应缓存清理；配置在 `RedisConfig` 节（`UseCache` 开关 + 连接串 `DefaultDatabase` 指定 db 号）。
 8. **Serilog 结构化日志**：记录操作人、单据编号、操作耗时、异常信息。
 9. **EF Core BaseRepository**：`IRepository<T>` 统一增删改查，读查询 `AsNoTracking` + 异步。
 10. **文件存储 / 邮件服务**：`IFileStorageService` / `IEmailService` 内部抽象，不接真实第三方。

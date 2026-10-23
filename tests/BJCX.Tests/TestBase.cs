@@ -48,7 +48,7 @@ public abstract class TestBase : IDisposable
         DbContext.Database.EnsureCreated();
 
         Mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
-        CacheService = new InMemoryCacheService(new CacheOptions { DefaultExpiryMinutes = 10 });
+        CacheService = new InMemoryCacheService(new RedisOptions { DefaultExpiryMinutes = 10 });
         EmailServiceMock = new Mock<IEmailService>();
 
         Seed();

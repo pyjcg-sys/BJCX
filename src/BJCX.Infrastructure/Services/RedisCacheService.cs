@@ -18,7 +18,7 @@ public class RedisCacheService : ICacheService
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    public RedisCacheService(IConnectionMultiplexer redis, CacheOptions options)
+    public RedisCacheService(IConnectionMultiplexer redis, RedisOptions options)
     {
         _redis = redis;
         _database = redis.GetDatabase();

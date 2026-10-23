@@ -17,7 +17,7 @@ public class InfrastructureModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        // 配置项：从 IConfiguration 绑定 Jwt 与 Cache 节
+        // 配置项：从 IConfiguration 绑定 Jwt 与 RedisConfig 节
         builder.Register(ctx =>
         {
             var options = new JwtOptions();
@@ -27,29 +27,29 @@ public class InfrastructureModule : Module
 
         builder.Register(ctx =>
         {
-            var options = new CacheOptions();
-            ctx.Resolve<IConfiguration>().GetSection(CacheOptions.SectionName).Bind(options);
+            var options = new RedisOptions();
+            ctx.Resolve<IConfiguration>().GetSection(RedisOptions.SectionName).Bind(options);
             return options;
         }).SingleInstance();
 
-        // Redis 连接复用器（单例，线程安全）
+        // Redis 连接复用器（单例，线程安全；UseCache=false 时不会被解析，也就不连接 Redis）
         builder.Register(ctx =>
         {
-            var options = ctx.Resolve<CacheOptions>();
+            var options = ctx.Resolve<RedisOptions>();
             return ConnectionMultiplexer.Connect(options.ConnectionString);
         }).As<IConnectionMultiplexer>().SingleInstance();
 
-        // 缓存服务：根据配置切换 Redis / 内存实现
+        // 缓存服务：UseCache=true 用 Redis，false 完全禁用缓存（NullCacheService）
         builder.Register(ctx =>
         {
-            var options = ctx.Resolve<CacheOptions>();
-            if (string.Equals(options.Provider, "Memory", StringComparison.OrdinalIgnoreCase))
+            var options = ctx.Resolve<RedisOptions>();
+            if (options.UseCache)
             {
-                return (ICacheService)new InMemoryCacheService(options);
+                return (ICacheService)new RedisCacheService(ctx.Resolve<IConnectionMultiplexer>(), options);
             }
 
-            return new RedisCacheService(ctx.Resolve<IConnectionMultiplexer>(), options);
-        }).As<ICacheService>().InstancePerLifetimeScope();
+            return (ICacheService)new NullCacheService();
+        }).As<ICacheService>().SingleInstance();
 
         // 通用仓储
         builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();

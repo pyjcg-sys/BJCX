@@ -12,7 +12,7 @@ public class InMemoryCacheService : ICacheService
     private readonly ConcurrentDictionary<string, CacheEntry> _cache = new();
     private readonly TimeSpan _defaultExpiry;
 
-    public InMemoryCacheService(CacheOptions options)
+    public InMemoryCacheService(RedisOptions options)
     {
         _defaultExpiry = TimeSpan.FromMinutes(options.DefaultExpiryMinutes);
     }

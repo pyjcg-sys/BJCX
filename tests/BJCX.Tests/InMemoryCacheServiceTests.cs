@@ -8,7 +8,7 @@ namespace BJCX.Tests;
 /// <summary>内存缓存服务单元测试：验证读写、过期与前缀删除。</summary>
 public class InMemoryCacheServiceTests
 {
-    private static InMemoryCacheService CreateCache() => new(new CacheOptions { DefaultExpiryMinutes = 10 });
+    private static InMemoryCacheService CreateCache() => new(new RedisOptions { DefaultExpiryMinutes = 10 });
 
     [Fact]
     public async Task 写入后能读取到值()
