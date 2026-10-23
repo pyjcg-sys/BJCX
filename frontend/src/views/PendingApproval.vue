@@ -46,7 +46,11 @@
 
       <h4 class="section-title">附件</h4>
       <div v-if="detail && detail.attachments.length">
-        <el-tag v-for="att in detail.attachments" :key="att.id" class="att-tag">{{ att.fileName }}</el-tag>
+        <div v-for="att in detail.attachments" :key="att.id" class="att-item">
+          <el-icon class="att-icon"><Document /></el-icon>
+          <el-link type="primary" @click="previewAttachment(att)">{{ att.fileName }}</el-link>
+          <span class="att-size">{{ formatSize(att.fileSize) }}</span>
+        </div>
       </div>
       <div v-else class="empty-text">无附件</div>
 
@@ -83,7 +87,7 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getPendingLeaves, getLeaveDetail, approveLeave, rejectLeave } from '../api/leave'
+import { getPendingLeaves, getLeaveDetail, approveLeave, rejectLeave, downloadAttachment } from '../api/leave'
 import { LEAVE_TYPE_MAP, LEAVE_STATUS_MAP, APPROVAL_ACTION_MAP } from '../utils/enums'
 
 const list = ref([])
@@ -153,6 +157,19 @@ function recordActionType(a) {
   return 'primary'
 }
 
+async function previewAttachment(att) {
+  const blob = await downloadAttachment(att.id)
+  const url = URL.createObjectURL(blob)
+  window.open(url, '_blank')
+  setTimeout(() => URL.revokeObjectURL(url), 60000)
+}
+
+function formatSize(size) {
+  if (size < 1024) return `${size} B`
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`
+  return `${(size / 1024 / 1024).toFixed(1)} MB`
+}
+
 load()
 </script>
 
@@ -164,8 +181,18 @@ load()
 .section-title {
   margin: 20px 0 12px;
 }
-.att-tag {
-  margin: 0 8px 8px 0;
+.att-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.att-icon {
+  color: #909399;
+}
+.att-size {
+  color: #999;
+  font-size: 12px;
 }
 .empty-text {
   color: #999;

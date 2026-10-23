@@ -99,6 +99,16 @@ public class LeaveController : ControllerBase
         return Ok(await _mediator.Send(new GetLeaveDetailQuery { LeaveRequestId = id }));
     }
 
+    /// <summary>下载/预览附件文件。</summary>
+    /// <param name="attachmentId">附件 Id。</param>
+    /// <returns>附件文件流。</returns>
+    [HttpGet("attachments/{attachmentId:long}")]
+    public async Task<IActionResult> DownloadAttachment(long attachmentId)
+    {
+        var result = await _mediator.Send(new GetAttachmentFileQuery { AttachmentId = attachmentId });
+        return File(result.Stream, result.ContentType, result.FileName);
+    }
+
     /// <summary>查询我的待审批单据分页列表。</summary>
     /// <param name="pageIndex">页码（从 1 开始）。</param>
     /// <param name="pageSize">每页条数（1-100）。</param>

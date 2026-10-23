@@ -29,3 +29,8 @@ export function approveLeave(id, comment) {
 export function rejectLeave(id, comment) {
   return request.post(`/leaves/${id}/reject`, { comment })
 }
+
+// 下载附件（返回 blob，用于预览/下载）
+export function downloadAttachment(id) {
+  return request.get(`/leaves/attachments/${id}`, { responseType: 'blob' })
+}
