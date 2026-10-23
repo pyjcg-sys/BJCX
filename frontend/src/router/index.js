@@ -27,6 +27,12 @@ const routes = [
         name: 'Workflows',
         component: () => import('../views/WorkflowConfig.vue'),
         meta: { title: '流程配置' }
+      },
+      {
+        path: 'emails',
+        name: 'Emails',
+        component: () => import('../views/Emails.vue'),
+        meta: { title: '邮件记录' }
       }
     ]
   }

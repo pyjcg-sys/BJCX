@@ -21,6 +21,10 @@
           <el-icon><Setting /></el-icon>
           <span>流程配置</span>
         </el-menu-item>
+        <el-menu-item index="/emails">
+          <el-icon><Message /></el-icon>
+          <span>邮件记录</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
 

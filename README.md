@@ -89,6 +89,7 @@ npm run dev
 | GET | `/api/leaves/pending` | 我的待办分页列表（Redis 缓存） |
 | GET | `/api/leaves/mine` | 我提交的申请分页列表 |
 | GET | `/api/users` | 用户列表（流程配置选审批人） |
+| GET | `/api/emails` | 邮件记录分页列表 |
 | POST | `/api/workflows` | 创建审批流程 |
 | GET | `/api/workflows` | 流程列表 |
 | GET | `/api/workflows/{id}` | 流程详情 |

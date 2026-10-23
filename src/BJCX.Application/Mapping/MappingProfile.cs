@@ -36,5 +36,8 @@ public class MappingProfile : Profile
         // 流程定义 → 列表项（NodeCount 来自节点集合数量）
         CreateMap<WorkflowDefinition, WorkflowListItemDto>()
             .ForMember(d => d.NodeCount, o => o.MapFrom(s => s.Nodes.Count));
+
+        // 邮件消息
+        CreateMap<EmailMessage, EmailMessageDto>();
     }
 }

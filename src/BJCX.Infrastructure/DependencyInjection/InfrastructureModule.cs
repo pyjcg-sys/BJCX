@@ -59,7 +59,7 @@ public class InfrastructureModule : Module
 
         // 各类服务实现
         builder.RegisterType<LocalFileStorageService>().As<IFileStorageService>().InstancePerLifetimeScope();
-        builder.RegisterType<LogEmailService>().As<IEmailService>().SingleInstance();
+        builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
         builder.RegisterType<CurrentUserService>().As<ICurrentUserService>().InstancePerLifetimeScope();
         builder.RegisterType<JwtTokenService>().As<ITokenService>().InstancePerLifetimeScope();
 
